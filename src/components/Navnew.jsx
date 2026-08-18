@@ -6,6 +6,7 @@ export const Navnew = ({
     onNewSaleClick,
     onAddProductClick,
     onSettingsClick,
+    onLogoutClick,
     onExportClick,
     businessProfile,
     inventory
@@ -242,6 +243,28 @@ export const Navnew = ({
 
                             <span className="text-[11px] hidden lg:block">
                                 Settings
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={onLogoutClick}
+                            className="group flex flex-col items-center gap-1"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.6"
+                                className="h-6 w-6 transition group-hover:text-[#344a22]"
+                            >
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <path d="M16 17l5-5-5-5"></path>
+                                <path d="M21 12H9"></path>
+                            </svg>
+
+                            <span className="text-[11px] hidden lg:block">
+                                Logout
                             </span>
                         </button>
 

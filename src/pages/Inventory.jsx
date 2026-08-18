@@ -30,7 +30,8 @@ export default function Inventory() {
     handleDeleteProduct,
     handleQuickStockChange,
   } = useOutletContext();
-
+  
+  
   return (
     <InventoryManager
 

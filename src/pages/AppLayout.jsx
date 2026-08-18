@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import {
+  api,
   loadInventory,
   saveInventory,
   loadOrders,
@@ -19,7 +20,6 @@ import {
   resetToSampleData,
   exportDataAsJSON,
 } from '../utils/storage';
-
 import { Navnew } from '../components/Navnew';
 
 import { ProductModal } from '../components/ProductModal';
@@ -32,6 +32,10 @@ import {
   CheckCircle2,
   AlertCircle,
 } from 'lucide-react';
+
+import { logoutUser } from './Login';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://ignacio-server.test/api';
 
 export default function AppLayout() {
 
@@ -96,6 +100,11 @@ export default function AppLayout() {
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
+  };
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate('/login', { replace: true });
   };
 
   /*
@@ -190,65 +199,142 @@ export default function AppLayout() {
   |--------------------------------------------------------------------------
   */
 
-  const handleSaveProduct = async (item) => {
+const handleSaveProduct = async (item) => {
+  console.log('Saving product:', item);
+  console.log('Editing product:', editingProduct);
 
-    try {
-
-      const savedItem = await saveInventory(item);
-
-      if (!savedItem) {
-        throw new Error(
-          'API did not return the saved inventory item.'
-        );
-      }
-
-      setInventory(prev => {
-
-        const exists = prev.some(
-          i => i.id === savedItem.id
-        );
-
-        if (exists) {
-
-          return prev.map(i =>
-            i.id === savedItem.id
-              ? savedItem
-              : i
-          );
-
-        }
-
-        return [
-          savedItem,
-          ...prev,
-        ];
-
-      });
-
-      showToast(
-        editingProduct
-          ? `Updated "${savedItem.name}" specifications.`
-          : `Added "${savedItem.name}" to inventory.`
+  try {
+    let savedItem;
+    if (!editingProduct) {
+    /*
+    |--------------------------------------------------------------------------
+    | NEW PRODUCT
+    |--------------------------------------------------------------------------
+    |
+    */
+      const response = await api.post(
+        '/inventory',
+        item
       );
 
-      setEditingProduct(null);
-      setIsProductModalOpen(false);
+      savedItem = response?.data?.data ?? response?.data;
 
-    } catch (error) {
-
-      console.error(
-        'Failed to save product:',
-        error
-      );
-
-      showToast(
-        'Failed to save product. Please try again.',
-        'warning'
-      );
-
+      console.log('Created product:', savedItem);
+      navigate('/inventory');
     }
 
-  };
+    /*
+    |--------------------------------------------------------------------------
+    | EXISTING PRODUCT
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    else {
+      const response = await api.put(
+        `/inventory/${encodeURIComponent(
+          editingProduct.id
+        )}`,
+        item
+      );
+
+      savedItem = response?.data?.data ?? response?.data;
+
+      console.log('Updated product:', savedItem);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validate API response
+    |--------------------------------------------------------------------------
+    */
+
+    if (!savedItem) {
+      throw new Error(
+        'API did not return the saved inventory item.'
+      );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update AppLayout inventory state
+    |--------------------------------------------------------------------------
+    */
+
+    setInventory(prev => {
+      const exists = prev.some(
+        product => product.id === savedItem.id
+      );
+
+      if (exists) {
+        return prev.map(product =>
+          product.id === savedItem.id
+            ? savedItem
+            : product
+        );
+      }
+showToast(
+      editingProduct
+        ? `Updated "${savedItem.name}" specifications.`
+        : `Added "${savedItem.name}" to inventory.`,
+      'success'
+    );
+      // return [
+      //   savedItem,
+      //   ...prev,
+      // ];
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Success message
+    |--------------------------------------------------------------------------
+    */
+
+    showToast(
+      editingProduct
+        ? `Updated "${savedItem.name}" specifications.`
+        : `Added "${savedItem.name}" to inventory.`,
+      'success'
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Close modal
+    |--------------------------------------------------------------------------
+    */
+
+    setEditingProduct(null);
+    setIsProductModalOpen(false);
+
+  } catch (error) {
+
+    console.error(
+      'Failed to save product:',
+      error
+    );
+
+    /*
+    | Show API error if available
+    */
+
+    const apiMessage =
+      error?.response?.data?.message ||
+      error?.response?.data?.error ||
+      error?.message ||
+      'Unknown error';
+
+    console.error(
+      'API error:',
+      apiMessage
+    );
+
+    showToast(
+      `Failed to save product: ${apiMessage}`,
+      'warning'
+    );
+  }
+};
 
   const handleDeleteProduct = async (itemId) => {
 
@@ -932,7 +1018,7 @@ export default function AppLayout() {
     <div className="min-h-screen bg-stone-100/90 text-stone-900 flex flex-col font-sans selection:bg-amber-200">
 
       {/* Navigation */}
-
+        
       <Navnew
         activeTab={activeTab}
 
@@ -977,6 +1063,8 @@ export default function AppLayout() {
           setIsSettingsModalOpen(true);
         }}
 
+        onLogoutClick={handleLogout}
+
         onExportClick={() => {
           exportDataAsJSON(
             inventory,
@@ -992,7 +1080,7 @@ export default function AppLayout() {
 
       {/* Routed page */}
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      <main className="flex-1 container w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
         <Outlet
           context={{

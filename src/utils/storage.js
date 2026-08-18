@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { logoutUser } from '../pages/Login';
 import {
   initialFurnitureCatalog,
   initialOrders,
@@ -13,13 +14,46 @@ import {
 |--------------------------------------------------------------------------
 */
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 });
+
+api.interceptors.request.use((config) => {
+  try {
+
+    const rawSession = localStorage.getItem('furniture-dashboard-auth-session');
+    const session = rawSession ? JSON.parse(rawSession) : null;
+    const token = session?.token;
+
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+
+      };
+    }
+  } catch (error) {
+    console.warn('Unable to parse auth session for request:', error);
+  }
+
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      console.log(error.response)
+      // console.warn('Unauthorized API request. Session may be invalid or backend auth is not accepting the token.', error?.response?.data || error?.message);
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 /*
 |--------------------------------------------------------------------------

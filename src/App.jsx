@@ -17,6 +17,7 @@ import StockMovements from './pages/StockMovements';
 import SingleProduct from './pages/SingleProduct';
 import ProductList from './pages/ProductList';
 import Login, { isAuthenticated } from './pages/Login';
+import Front from './pages/Front';
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -39,7 +40,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/products" element={<ProductList />} />
+        <Route path="/products" element={<Front />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>

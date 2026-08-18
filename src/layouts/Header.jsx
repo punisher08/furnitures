@@ -282,7 +282,7 @@ function Header() {
                 </svg>
 
                 <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#344a22] px-1 text-[9px] font-semibold text-white">
-                  3
+                  0
                 </span>
 
               </div>
@@ -340,7 +340,7 @@ function Header() {
                 </svg>
 
                 <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#e8a12d] px-1 text-[9px] font-semibold text-white">
-                  2
+                  0
                 </span>
 
               </div>
@@ -372,44 +372,13 @@ function Header() {
             icon="shop"
             title="Shop"
             subtitle="Furniture & Decor"
-            hasArrow
+            active
             to="/products"
           />
 
 
-          {/* ROOMS */}
-
-          <NavItem
-            icon="rooms"
-            title="Rooms"
-            subtitle="Design by Space"
-            hasArrow
-            to="/rooms"
-          />
-
-
-          {/* INSPIRATION */}
-
-          <NavItem
-            icon="leaf"
-            title="Inspiration"
-            subtitle="Ideas & Stories"
-            hasArrow
-            to="/inspiration"
-          />
-
-
-          {/* THE STUDIO */}
-
-          <NavItem
-            icon="studio"
-            title="The Studio"
-            subtitle="Our Design Process"
-            hasArrow
-            to="/studio"
-          />
-
-
+         
+        
           {/* SALE */}
 
           <NavItem
@@ -424,7 +393,8 @@ function Header() {
           {/* CTA */}
 
           <Link
-            to="/contact"
+            to="https://www.facebook.com/Checkbread"
+            target="_blank"
             className="ml-auto flex h-[58px] items-center gap-4 rounded-full bg-[#344a22] px-4 pr-6 text-white transition hover:bg-[#283a1a]"
           >
 

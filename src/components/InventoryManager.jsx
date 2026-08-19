@@ -12,7 +12,8 @@ import {
   PlusCircle, 
   MinusCircle, 
   Download, 
-  Box 
+  Box, 
+  Eye
 } from 'lucide-react';
 
 export const InventoryManager = ({
@@ -238,6 +239,17 @@ export const InventoryManager = ({
 
                   {/* Quick Action Overlay on Hover */}
                   <div className="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 p-4">
+                    <button
+                     onClick={() => {
+                        navigate(`/product/${item.id}`);
+                      }}
+                      className="p-2 bg-white text-stone-900 rounded-lg hover:bg-stone-100 shadow-md transition-transform hover:scale-110"
+                      title="Showroom Price Tag"
+                    >
+                      
+                      <Eye className="w-4 h-4" />
+                     
+                    </button>
                     <button
                       onClick={() => onPrintTag(item)}
                       className="p-2 bg-white text-stone-900 rounded-lg hover:bg-stone-100 shadow-md transition-transform hover:scale-110"

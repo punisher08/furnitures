@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Search, Heart, Grid2X2, List, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const PRODUCTS_PER_LOAD = 8;
 
@@ -27,6 +28,7 @@ export const ProductListing = ({
       .filter(Boolean)
   ),
 ];
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('default');
 
@@ -654,6 +656,9 @@ if (selectedCategories.length > 0) {
                     {product.image ? (
 
                       <img
+                      onClick={()=>{
+                        navigate(`/view/product/${product.id}`);
+                      }}
                         src={product.image}
                         alt={product.name}
                         className="

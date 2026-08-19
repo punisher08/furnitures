@@ -1,4 +1,6 @@
 import ProductSearch from './ProductSearch';
+import { useNavigate } from 'react-router-dom';
+
 export const Navnew = ({
     activeTab,
     setActiveTab,
@@ -11,7 +13,7 @@ export const Navnew = ({
     businessProfile,
     inventory
 }) => {
-
+    const navigate = useNavigate();
     const handleTabClick = (e, tab) => {
         e.preventDefault();
         setActiveTab(tab);
@@ -50,7 +52,7 @@ export const Navnew = ({
 
                         <button
                             type="button"
-                            onClick={(e) => handleTabClick(e, 'movements')}
+                            onClick={(e) => navigate('/products')}
                             className="flex items-center gap-2 transition hover:text-white"
                         >
                             <svg
@@ -64,7 +66,7 @@ export const Navnew = ({
                                 <path d="M12 7v5l3 2"></path>
                             </svg>
 
-                            Stock Logs
+                            Visit Site
                         </button>
 
                         <span className="h-4 w-px bg-white/30"></span>
@@ -146,7 +148,7 @@ export const Navnew = ({
                                 className="leading-none"
                             >
                                 <span
-                                    className="block font-serif text-[38px] font-semibold tracking-tight text-[#344a22]"
+                                    className="text-[20px] lg:text-[38px] block font-serif font-semibold tracking-tight text-[#344a22]"
                                 >
                                     IGNACIO
                                 </span>
@@ -203,7 +205,7 @@ export const Navnew = ({
                         <button
                             type="button"
                             onClick={onNewSaleClick}
-                            className="group flex flex-col items-center gap-1"
+                            className="group flex flex-col items-center gap-1 hidden lg:block"
                         >
                             <svg
                                 viewBox="0 0 24 24"
@@ -563,7 +565,7 @@ export const Navnew = ({
                     <button
                         type="button"
                         onClick={onAddProductClick}
-                        className="flex h-[58px] items-center gap-4 rounded-full border border-[#344a22] px-4 pr-6 text-[#344a22] transition hover:bg-[#344a22] hover:text-white"
+                        className="hidden flex h-[58px] items-center gap-4 rounded-full border border-[#344a22] px-4 pr-6 text-[#344a22] transition hover:bg-[#344a22] hover:text-white"
                     >
 
                         <div

@@ -38,6 +38,7 @@ export const ProductModal = ({
     status: 'in_stock',
     imageUrl: SAMPLE_FURNITURE_IMAGES[0].url,
     description: '',
+    file:''
   });
 
   useEffect(() => {
@@ -48,9 +49,9 @@ export const ProductModal = ({
       const rand = Math.floor(100 + Math.random() * 900);
       setFormData({
         name: '',
-        sku: `FURN-LIV-${rand}`,
-        category: 'Living Room',
-        material: 'Solid European Oak',
+        sku: `FURN-DIN-${rand}`,
+        category: 'Dining Table',
+        material: 'Solid Mahogany',
         finish: 'Natural Matte Hardwax',
         stock: 6,
         minStockAlert: 2,
@@ -59,11 +60,12 @@ export const ProductModal = ({
         dimensions: { width: 140, depth: 80, height: 75 },
         weightKg: 32,
         roomType: 'Living Room',
-        supplier: 'Nordic Craft Co.',
+        supplier: 'IGNACIO FURNITURES',
         leadTimeDays: 14,
         status: 'in_stock',
         imageUrl: SAMPLE_FURNITURE_IMAGES[0].url,
         description: 'Handcrafted solid wood furniture piece engineered for modern living and longevity.',
+        imageFile:''
       });
     }
   }, [editingItem, isOpen]);
@@ -77,12 +79,11 @@ export const ProductModal = ({
 
   const handleCategoryChange = (cat) => {
     const prefixMap = {
-      'Living Room': 'LIV',
-      'Bedroom': 'BED',
-      'Dining Room': 'DIN',
-      'Home Office': 'OFC',
-      'Lighting & Accents': 'LGT',
-      'Outdoor': 'OUT',
+      'Bedframes': 'BED',
+      'Dining Tables': 'DIN',
+      'Office Tables': 'OFC',
+      'Doors': 'DOOR',
+      'Steel': 'STL'
     };
     const code = prefixMap[cat] || 'GEN';
     const rand = Math.floor(100 + Math.random() * 900);
@@ -93,6 +94,7 @@ export const ProductModal = ({
       sku: editingItem ? prev.sku : `FURN-${code}-${rand}`,
     }));
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -130,6 +132,7 @@ export const ProductModal = ({
       leadTimeDays: Number(formData.leadTimeDays) || 14,
       status: status,
       imageUrl: formData.imageUrl || SAMPLE_FURNITURE_IMAGES[0].url,
+      imageFile:formData.imageFile,
       description: formData.description || '',
       dateAdded: editingItem ? editingItem.dateAdded : new Date().toISOString().slice(0, 10),
     };
@@ -202,12 +205,11 @@ export const ProductModal = ({
                 onChange={e => handleCategoryChange(e.target.value)}
                 className="w-full px-3.5 py-2 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white"
               >
-                <option value="Living Room">Living Room</option>
-                <option value="Dining Room">Dining Room</option>
-                <option value="Bedroom">Bedroom</option>
-                <option value="Home Office">Home Office</option>
-                <option value="Lighting & Accents">Lighting & Accents</option>
-                <option value="Outdoor">Outdoor</option>
+                <option value="Bedframes">Bedframes</option>
+                <option value="Dining Tables">Dining Tables</option>
+                <option value="Office Tables">Office Tables</option>
+                <option value="Doors">Doors</option>
+                <option value="Steel">Steel</option>
               </select>
             </div>
           </div>
@@ -407,6 +409,7 @@ export const ProductModal = ({
     <input
       type="url"
       value={formData.imageUrl || ''}
+    
       onChange={e =>
         setFormData({
           ...formData,
@@ -456,6 +459,10 @@ export const ProductModal = ({
           imageUrl,
           imageFile: file,
         });
+      //  formData.append('file',file)
+       console.log(formData);
+       
+        
       }}
     />
 

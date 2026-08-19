@@ -15,9 +15,13 @@ import Sales from './pages/Sales';
 import Analytics from './pages/Analytics';
 import StockMovements from './pages/StockMovements';
 import SingleProduct from './pages/SingleProduct';
-import ProductList from './pages/ProductList';
+// import ProductList from './pages/ProductList';
+
+import Admin from './pages/Admin';
 import Login, { isAuthenticated } from './pages/Login';
 import Front from './pages/Front';
+import Newarrivals from './pages/Newarrivals';
+import About from './pages/About';
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -41,10 +45,13 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/products" element={<Front />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/collection/new" element={<Newarrivals />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/analytics" element={<Analytics />} />

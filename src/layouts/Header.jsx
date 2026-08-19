@@ -39,7 +39,7 @@ function Header() {
           <div className="hidden items-center gap-5 text-xs text-white/80 md:flex">
 
             <Link
-              to="/track-order"
+              to="/products"
               className="flex items-center gap-2 transition hover:text-white"
             >
 
@@ -54,7 +54,7 @@ function Header() {
                 <circle cx="12" cy="10" r="2.5" />
               </svg>
 
-              Track Order
+              Products
 
             </Link>
 
@@ -187,7 +187,7 @@ function Header() {
 
               <div className="leading-none">
 
-                <span className="block font-serif text-[38px] font-semibold tracking-tight text-[#344a22]">
+                <span className="front-page block font-serif text-[20px] lg:text-[38px] font-semibold tracking-tight text-[#344a22]">
                   IGNACIO
                 </span>
 
@@ -246,7 +246,7 @@ function Header() {
 
             <button
               type="button"
-              className="lg:hidden"
+              className="hidden"
               aria-label="Search"
             >
               <svg
@@ -297,7 +297,7 @@ function Header() {
             {/* Account */}
 
             <Link
-              to="/account"
+              to="/admin"
               className="group flex flex-col items-center gap-1"
             >
 
@@ -322,7 +322,7 @@ function Header() {
             {/* Cart */}
 
             <Link
-              to="/cart"
+              to="/admin"
               className="group flex flex-col items-center gap-1"
             >
 
@@ -381,12 +381,13 @@ function Header() {
         
           {/* SALE */}
 
+          
+          
           <NavItem
             icon="sale"
-            title="Sale"
+            title="About"
             subtitle="Special Offers"
-            sale
-            to="/sale"
+            to="/about"
           />
 
 
@@ -498,7 +499,7 @@ function NavItem({
     <Link
       to={to}
       className={`group flex items-center gap-3 ${
-        sale ? 'text-[#d75c38]' : ''
+        sale ? '' : ''
       }`}
     >
 
@@ -527,7 +528,7 @@ function NavItem({
             stroke="currentColor"
             strokeWidth="1.5"
             className="h-5 w-5"
-          >
+          > 
             <path d="M4 11h16v8H4z" />
             <path d="M6 11V7h5v4M13 11V7h5v4" />
             <path d="M6 19v2M18 19v2" />
@@ -603,7 +604,7 @@ function NavItem({
         <span
           className={`mt-1 block text-[9px] ${
             sale
-              ? 'text-[#d75c38]'
+              ? ''
               : 'text-stone-400'
           }`}
         >

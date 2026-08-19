@@ -205,21 +205,62 @@ const handleSaveProduct = async (item) => {
 
   try {
     let savedItem;
-    if (!editingProduct) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prepare FormData
+    |--------------------------------------------------------------------------
+    */
+
+    // const formData = new FormData();
+    const formData = new FormData()
+
+  
+
+    if (item.imageFile instanceof File) {
+      formData.append('image', item.imageFile)
+    }
+
+    Object.entries(item).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        if (key === 'imageFile' && value instanceof File) {
+          formData.append('image', value); // also: was 'imageUrl' — should be 'image' to match PHP's $_FILES['image']
+        } else if (key === 'imageFile') {
+          // not a real File (e.g. {}), skip it — nothing useful to send
+          return;
+        } else if (typeof value === 'object') {
+          // dimensions, or any other nested object
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
+      }
+    });
+    // console.log(formData.imageFile);
+    // return;
+    
+
     /*
     |--------------------------------------------------------------------------
     | NEW PRODUCT
     |--------------------------------------------------------------------------
-    |
     */
+
+    if (!editingProduct) {
       const response = await api.post(
         '/inventory',
-        item
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
 
       savedItem = response?.data?.data ?? response?.data;
 
       console.log('Created product:', savedItem);
+
       navigate('/inventory');
     }
 
@@ -227,15 +268,17 @@ const handleSaveProduct = async (item) => {
     |--------------------------------------------------------------------------
     | EXISTING PRODUCT
     |--------------------------------------------------------------------------
-    |
     */
 
     else {
       const response = await api.put(
-        `/inventory/${encodeURIComponent(
-          editingProduct.id
-        )}`,
-        item
+        `/inventory/${encodeURIComponent(editingProduct.id)}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
 
       savedItem = response?.data?.data ?? response?.data;
@@ -273,16 +316,11 @@ const handleSaveProduct = async (item) => {
             : product
         );
       }
-showToast(
-      editingProduct
-        ? `Updated "${savedItem.name}" specifications.`
-        : `Added "${savedItem.name}" to inventory.`,
-      'success'
-    );
-      // return [
-      //   savedItem,
-      //   ...prev,
-      // ];
+
+      return [
+        savedItem,
+        ...prev,
+      ];
     });
 
     /*
@@ -313,10 +351,6 @@ showToast(
       'Failed to save product:',
       error
     );
-
-    /*
-    | Show API error if available
-    */
 
     const apiMessage =
       error?.response?.data?.message ||

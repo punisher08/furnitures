@@ -249,8 +249,8 @@ export const saveOrders = async (order) => {
     let response;
 
     if (order?.id) {
-      response = await api.put(
-        `/orders/${encodeURIComponent(order.id)}`,
+      response = await api.post(
+        `/orders/`,
         order
       );
     } else {

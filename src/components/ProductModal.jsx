@@ -409,14 +409,15 @@ export const ProductModal = ({
     <input
       type="url"
       value={formData.imageUrl || ''}
+      onChange={() =>
+          setFormData({
+            ...formData,
+            imageUrl: img.url,
+            imageFile: null,
+          })
+        }
     
-      onChange={e =>
-        setFormData({
-          ...formData,
-          imageUrl: e.target.value,
-          imageFile: null,
-        })
-      }
+      
       placeholder="https://images.unsplash.com/..."
       className="flex-1 px-3.5 py-2 rounded-lg border border-stone-300 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none"
     />

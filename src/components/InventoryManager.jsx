@@ -72,6 +72,16 @@ export const InventoryManager = ({
   const lowStockCount = inventory.filter(i => i.stock <= i.minStockAlert).length;
   const outOfStockCount = inventory.filter(i => i.stock === 0).length;
 
+  
+
+  const confirmDeleteProduct = (item)=> {
+    if(confirm('Pleaser confirm Product deletion. This will also delete data from order records '+ item.name)){
+      onDeleteProduct(item.id);
+    }
+
+    
+  }
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header & Quick Action Bar */}
@@ -485,9 +495,10 @@ export const InventoryManager = ({
                           </button>
                           <button
                             onClick={() => {
-                              if (confirm(`Delete ${item.name} from catalog?`)) {
-                                onDeleteProduct(item.id);
-                              }
+                              confirmDeleteProduct(item)
+                              // if (confirm(`Delete ${item.name} from catalog?`)) {
+                              //   onDeleteProduct(item.id);
+                              // }
                             }}
                             className="p-1.5 hover:bg-red-50 rounded text-red-500 hover:text-red-700"
                             title="Delete"

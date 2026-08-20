@@ -213,29 +213,35 @@ const handleSaveProduct = async (item) => {
     */
 
     // const formData = new FormData();
-    const formData = new FormData()
+    const formData = new FormData();
 
-  
+Object.entries(item).forEach(([key, value]) => {
+  if (value === null || value === undefined) {
+    return;
+  }
 
-    if (item.imageFile instanceof File) {
-      formData.append('image', item.imageFile)
-    }
+  // Handle image separately
+  if (key === 'imageFile') {
+    return;
+  }
 
-    Object.entries(item).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        if (key === 'imageFile' && value instanceof File) {
-          formData.append('image', value); // also: was 'imageUrl' — should be 'image' to match PHP's $_FILES['image']
-        } else if (key === 'imageFile') {
-          // not a real File (e.g. {}), skip it — nothing useful to send
-          return;
-        } else if (typeof value === 'object') {
-          // dimensions, or any other nested object
-          formData.append(key, JSON.stringify(value));
-        } else {
-          formData.append(key, value);
-        }
-      }
-    });
+  // Handle objects like dimensions
+  if (typeof value === 'object') {
+    formData.append(key, JSON.stringify(value));
+    return;
+  }
+
+  formData.append(key, value);
+});
+
+// Add image only once
+if (item.imageFile instanceof File) {
+  formData.append(
+    'image',
+    item.imageFile,
+    item.imageFile.name
+  );
+}
     // console.log(formData.imageFile);
     // return;
     
@@ -271,7 +277,9 @@ const handleSaveProduct = async (item) => {
     */
 
     else {
-      const response = await api.put(
+      formData.append('_method', 'PUT');
+
+      const response = await api.post(
         `/inventory/${encodeURIComponent(editingProduct.id)}`,
         formData,
         {
@@ -282,8 +290,12 @@ const handleSaveProduct = async (item) => {
       );
 
       savedItem = response?.data?.data ?? response?.data;
-
+      
+      
       console.log('Updated product:', savedItem);
+      // console.log(savedItem.imageUrl);
+      // navigate('/inventory')
+      
     }
 
     /*
@@ -335,7 +347,7 @@ const handleSaveProduct = async (item) => {
         : `Added "${savedItem.name}" to inventory.`,
       'success'
     );
-
+    
     /*
     |--------------------------------------------------------------------------
     | Close modal
@@ -344,6 +356,7 @@ const handleSaveProduct = async (item) => {
 
     setEditingProduct(null);
     setIsProductModalOpen(false);
+   
 
   } catch (error) {
 

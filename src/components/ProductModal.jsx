@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, DollarSign, Box } from 'lucide-react';
+import ProductEditor from './ProductEditor';
 
 const SAMPLE_FURNITURE_IMAGES = [
   { label: 'Green Velvet Sofa', url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80' },
@@ -552,14 +553,19 @@ export const ProductModal = ({
           {/* Description */}
           <div>
             <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1">
-              Design & Craft Description
+              Design & Craft Description test
+             
             </label>
-            <textarea
-              rows={2}
+           
+            <ProductEditor
+            className="text-[11px] text-stone-500"
               value={formData.description || ''}
-              onChange={e => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Detail the wood grain, craftsmanship techniques, joinery, or ergonomic design features..."
-              className="w-full px-3.5 py-2 rounded-lg border border-stone-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
+              onChange={(html) =>
+                setFormData({
+                  ...formData,
+                  description: html,
+                })
+              }
             />
           </div>
 

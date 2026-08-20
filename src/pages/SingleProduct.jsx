@@ -704,15 +704,12 @@ export default function SingleProduct() {
 
               {/* DESCRIPTION */}
 
-              <div className="mt-5 text-[12px] leading-5 text-stone-500">
+              <div className="mt-5 text-[12px] leading-5 text-stone-500"
+               dangerouslySetInnerHTML={{
+                __html: product.description,
+              }}>
 
-                {product.description || (
-                  <>
-                    Indulge in organic comfort. This beautifully crafted
-                    piece combines timeless design with luxurious materials,
-                    creating a serene addition to your space.
-                  </>
-                )}
+               
 
               </div>
 

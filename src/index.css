@@ -12,3 +12,7 @@
   }
 }
 
+.tiptap.ProseMirror{
+  outline: none;
+  border: none;
+}

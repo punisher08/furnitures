@@ -349,7 +349,7 @@ function AboutUs() {
 
                       <a
                         key={product.id || slug || name}
-                        href={`/products/${slug}`}
+                        href={`/products/${product.id}`}
                         className="
                           group
                           overflow-hidden

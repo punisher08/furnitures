@@ -45,6 +45,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/products" element={<Front />} />
+        <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/collection/new" element={<Newarrivals />} />
@@ -56,7 +57,7 @@ export default function App() {
             <Route path="/sales" element={<Sales />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/stock-movements" element={<StockMovements />} />
-            <Route path="/product/:id" element={<SingleProduct />} />
+            
           </Route>
         </Route>
 

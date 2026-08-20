@@ -657,7 +657,7 @@ if (selectedCategories.length > 0) {
 
                       <img
                       onClick={()=>{
-                        navigate(`/view/product/${product.id}`);
+                        navigate(`/product/${product.id}`);
                       }}
                         src={product.image}
                         alt={product.name}

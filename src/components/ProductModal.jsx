@@ -78,13 +78,19 @@ export const ProductModal = ({
   const profitAmt = retail - cost;
 
   const handleCategoryChange = (cat) => {
-    const prefixMap = {
-      'Bedframes': 'BED',
-      'Dining Tables': 'DIN',
-      'Office Tables': 'OFC',
-      'Doors': 'DOOR',
-      'Steel': 'STL'
-    };
+  const prefixMap = {
+    'Living Room': 'LIV',
+    'Dining Room': 'DIN',
+    'Bedroom': 'BED',
+    'Home Office': 'OFC',
+    'Kitchen': 'KIT',
+    'Bathroom': 'BTH',
+    'Storage': 'STR',
+    'Outdoor': 'OUT',
+    'Doors': 'DOOR',
+    'Lighting & Accents': 'LGT',
+    'Custom Furniture': 'CUS',
+  };
     const code = prefixMap[cat] || 'GEN';
     const rand = Math.floor(100 + Math.random() * 900);
     setFormData(prev => ({
@@ -205,11 +211,18 @@ export const ProductModal = ({
                 onChange={e => handleCategoryChange(e.target.value)}
                 className="w-full px-3.5 py-2 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white"
               >
-                <option value="Bedframes">Bedframes</option>
-                <option value="Dining Tables">Dining Tables</option>
-                <option value="Office Tables">Office Tables</option>
+                <option value="">Select Category</option>
+                <option value="Living Room">Living Room</option>
+                <option value="Dining Room">Dining Room</option>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Home Office">Home Office</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Bathroom">Bathroom</option>
+                <option value="Storage">Storage</option>
+                <option value="Outdoor">Outdoor</option>
                 <option value="Doors">Doors</option>
-                <option value="Steel">Steel</option>
+                <option value="Lighting & Accents">Lighting & Accents</option>
+                <option value="Custom Furniture">Custom Furniture</option>
               </select>
             </div>
           </div>

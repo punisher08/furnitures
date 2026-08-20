@@ -111,15 +111,20 @@ export const SalesManager = ({
   |--------------------------------------------------------------------------
   */
 
-  const categories = [
-    'All',
-    'Living Room',
-    'Dining Room',
-    'Bedroom',
-    'Home Office',
-    'Lighting & Accents',
-    'Outdoor',
-  ];
+ const categories = [
+  'All',
+  'Living Room',
+  'Dining Room',
+  'Bedroom',
+  'Home Office',
+  'Kitchen',
+  'Bathroom',
+  'Storage',
+  'Outdoor',
+  'Doors',
+  'Lighting & Accents',
+  'Custom Furniture',
+];
 
   /*
   |--------------------------------------------------------------------------

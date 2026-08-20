@@ -231,7 +231,7 @@ function NewArrivals() {
 
                   <div className="relative aspect-[0.96] overflow-hidden">
 
-                    <Link to={`/products/${product.id}`}>
+                    <Link to={`/product/${product.id}`}>
 
                       <img
                         src={product.image}
@@ -287,7 +287,7 @@ function NewArrivals() {
 
 
                     <Link
-                      to={`/products/${product.id}`}
+                      to={`/product/${product.id}`}
                       className="mt-3 font-serif text-[19px] leading-tight text-[#302f2b] transition hover:text-[#405f28]"
                     >
                       {product.name}

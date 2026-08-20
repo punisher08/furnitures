@@ -6,22 +6,21 @@ const PRODUCTS_PER_LOAD = 8;
 
 
 
-const materials = [
-  'All',
-  'Oak',
-  'Bouclé',
-  'Leather',
-  'Stone',
-  'Brass',
-];
+
 
 export const ProductListing = ({
   inventory = [],
   onProductClick,
   onAddToCart,
 }) => {
-    
-     const categories = [
+  const materials = [
+  ...new Set(
+    inventory
+      .map(product => product.material)
+      .filter(Boolean)
+  ),
+]; 
+const categories = [
   ...new Set(
     inventory
       .map(product => product.category)
@@ -35,6 +34,8 @@ export const ProductListing = ({
   const [selectedCategories, setSelectedCategories] = useState(
     categories
   );
+  console.log(selectedCategories);
+  
  
 
   const [availability, setAvailability] = useState({
@@ -44,7 +45,7 @@ export const ProductListing = ({
 
   const [selectedMaterial, setSelectedMaterial] = useState('All');
 
-  const [maxPrice, setMaxPrice] = useState(4000);
+  const [maxPrice, setMaxPrice] = useState(100000);
 
   const [visibleCount, setVisibleCount] = useState(
     PRODUCTS_PER_LOAD
@@ -225,9 +226,10 @@ if (selectedCategories.length > 0) {
       custom: true,
     });
     setSelectedMaterial('All');
-    setMaxPrice(4000);
+    setMaxPrice(100000);
     setVisibleCount(PRODUCTS_PER_LOAD);
   };
+
 
   /*
    * Add cart
@@ -488,8 +490,8 @@ if (selectedCategories.length > 0) {
 
                 <input
                   type="range"
-                  min="100"
-                  max="4000"
+                  min="1000"
+                  max="100000"
                   step="50"
                   value={maxPrice}
                   onChange={(e) => {
@@ -502,7 +504,7 @@ if (selectedCategories.length > 0) {
                 <div className="mt-2 flex justify-between text-[12px] text-stone-500">
 
                   <span>
-                    ₱100
+                    ₱1000
                   </span>
 
                   <span className="font-semibold text-stone-700">

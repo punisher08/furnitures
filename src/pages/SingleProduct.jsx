@@ -856,7 +856,7 @@ export default function SingleProduct() {
                       ↻
                     </span>
 
-                    After Sale support
+                    Support
 
                   </div>
 

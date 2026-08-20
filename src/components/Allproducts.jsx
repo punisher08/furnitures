@@ -158,7 +158,8 @@ export const Allproducts = () => {
           'Products normalized:',
           normalizedProducts
         );
-
+        // console.log(normalizedProducts);
+        
         setProducts(normalizedProducts);
 
       } catch (error) {
@@ -196,8 +197,6 @@ export const Allproducts = () => {
       ) : (
         <ProductListing
           inventory={products}
-          profile={{}}
-
           onProductClick={(product) => {
             console.log(
               'Selected product:',

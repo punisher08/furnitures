@@ -93,7 +93,7 @@ export const Navnew = ({
                     {/* LOGO */}
                     <button
                         type="button"
-                        onClick={() => setActiveTab('overview')}
+                        onClick={() => {navigate('/admin')}}
                         className="flex shrink-0 items-center"
                     >
                         <div className="flex items-center gap-3">

@@ -192,7 +192,7 @@ function Header() {
                 </span>
 
                 <span className="mt-1 block text-[8px] font-medium uppercase tracking-[0.45em] text-[#789052]">
-                  Natural Living
+                  Furnitures
                 </span>
 
               </div>

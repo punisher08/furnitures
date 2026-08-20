@@ -200,8 +200,8 @@ export default function AppLayout() {
   */
 
 const handleSaveProduct = async (item) => {
-  console.log('Saving product:', item);
-  console.log('Editing product:', editingProduct);
+  // console.log('Saving product:', item);
+  // console.log('Editing product:', editingProduct);
 
   try {
     let savedItem;
@@ -265,7 +265,7 @@ if (item.imageFile instanceof File) {
 
       savedItem = response?.data?.data ?? response?.data;
 
-      console.log('Created product:', savedItem);
+      // console.log('Created product:', savedItem);
 
       navigate('/inventory');
     }
@@ -290,9 +290,17 @@ if (item.imageFile instanceof File) {
       );
 
       savedItem = response?.data?.data ?? response?.data;
+      if (savedItem?.imageUrl) {
+        savedItem = {
+          ...savedItem,
+          imageUrl: `${savedItem.imageUrl}${
+            savedItem.imageUrl.includes('?') ? '&' : '?'
+          }v=${Date.now()}`,
+        };
+      }
       
       
-      console.log('Updated product:', savedItem);
+      // console.log('Updated product:', savedItem);
       // console.log(savedItem.imageUrl);
       // navigate('/inventory')
       

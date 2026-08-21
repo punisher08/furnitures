@@ -22,8 +22,6 @@ const api = axios.create({
 const unwrapResponseData = (response) => {
   let payload = response?.data;
 
-  console.log('RAW API RESPONSE:', payload);
-
   // { success: true, data: [...] }
   if (
     payload &&
@@ -132,12 +130,7 @@ export const Allproducts = () => {
       try {
         setLoading(true);
 
-        const response = await api.get('/products');
-
-        console.log(
-          'Products API response:',
-          response
-        );
+        const response = await api.get('/get/products');
 
         if (!isMounted) {
           return;
@@ -146,18 +139,11 @@ export const Allproducts = () => {
         const list =
           unwrapResponseData(response);
 
-        console.log(
-          'Products extracted:',
-          list
-        );
+        
 
         const normalizedProducts =
           list.map(normalizeProduct);
 
-        console.log(
-          'Products normalized:',
-          normalizedProducts
-        );
         // console.log(normalizedProducts);
         
         setProducts(normalizedProducts);

@@ -1,13 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { Search, Heart, Grid2X2, List, ChevronDown } from 'lucide-react';
+import { Search, Heart, Grid2X2, List, ChevronDown, SlidersHorizontal, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const PRODUCTS_PER_LOAD = 8;
-
-
-
-
-
 export const ProductListing = ({
   inventory = [],
   onProductClick,
@@ -34,7 +29,6 @@ const categories = [
   const [selectedCategories, setSelectedCategories] = useState(
     categories
   );
-  console.log(selectedCategories);
   
  
 
@@ -46,6 +40,8 @@ const categories = [
   const [selectedMaterial, setSelectedMaterial] = useState('All');
 
   const [maxPrice, setMaxPrice] = useState(100000);
+  // Add this inside your parent component where the sidebar lives:
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [visibleCount, setVisibleCount] = useState(
     PRODUCTS_PER_LOAD
@@ -243,6 +239,8 @@ if (selectedCategories.length > 0) {
     console.log('Add to cart:', product);
   };
 
+  
+
   return (
     <section className="min-h-screen bg-[#faf9f6] px-4 py-8 sm:px-6 lg:px-8">
 
@@ -254,296 +252,195 @@ if (selectedCategories.length > 0) {
               SIDEBAR
           ===================================================== */}
 
-          <aside className="h-fit rounded-xl border border-[#ddd9d0] bg-[#faf9f6] p-4">
-
-            {/* Search */}
-            <div>
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Search
-              </label>
-
-              <div className="mt-2 border-t border-[#ddd9d0] pt-3">
-
-                <div className="relative">
-
-                  <Search
-                    className="absolute left-3 top-1/2 h-3 w-3 -translate-y-1/2 text-stone-400"
-                  />
-
-                  <input
-                    type="search"
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setVisibleCount(PRODUCTS_PER_LOAD);
-                    }}
-                    placeholder="Type to search..."
-                    className="
-                      h-8
-                      w-full
-                      rounded-md
-                      border
-                      border-[#ddd9d0]
-                      bg-white
-                      pl-8
-                      pr-2
-                      text-[12px]
-                      text-stone-700
-                      outline-none
-                      transition
-                      focus:border-[#344a22]
-                    "
-                  />
-
-                </div>
-
-              </div>
-            </div>
-
-
-            {/* Sort */}
-            <div className="mt-5">
-
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Sort By
-              </label>
-
-              <div className="mt-2 border-t border-[#ddd9d0] pt-3">
-
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  className="
-                    h-8
-                    w-full
-                    rounded-md
-                    border
-                    border-[#ddd9d0]
-                    bg-white
-                    px-2
-                    text-[12px]
-                    text-stone-600
-                    outline-none
-                    focus:border-[#344a22]
-                  "
-                >
-                  <option value="default">
-                    Default Sorting
-                  </option>
-
-                  <option value="price-low">
-                    Price: Low to High
-                  </option>
-
-                  <option value="price-high">
-                    Price: High to Low
-                  </option>
-
-                  <option value="name">
-                    Name
-                  </option>
-                </select>
-
-              </div>
-
-            </div>
-
-
-            {/* Categories */}
-            <div className="mt-5">
-
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Categories
-              </label>
-
-              <div className="mt-2 space-y-2 border-t border-[#ddd9d0] pt-3">
-
-              
-
-                  {categories.map(category => (
-                    <label
-                      key={category}
-                      className="flex items-center gap-2 cursor-pointer text-xs text-stone-600"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(category)}
-                        onChange={() => toggleCategory(category)}
-                        className="h-3 w-3 accent-[#344a22]"
-                      />
-
-                      <span>{category}</span>
-                    </label>
-                  ))}
-
-              
-
-              </div>
-
-            </div>
-
-
-            {/* Availability */}
-            <div className="mt-5">
-
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Availability
-              </label>
-
-              <div className="mt-2 space-y-2 border-t border-[#ddd9d0] pt-3">
-
-                <label className="flex cursor-pointer items-center gap-2">
-
-                  <input
-                    type="checkbox"
-                    checked={availability.inStock}
-                    onChange={(e) =>
-                      setAvailability((prev) => ({
-                        ...prev,
-                        inStock: e.target.checked,
-                      }))
-                    }
-                    className="h-3 w-3 accent-[#344a22]"
-                  />
-
-                  <span className="text-[12px] text-stone-500">
-                    In Stock Only
-                  </span>
-
-                </label>
-
-
-                <label className="flex cursor-pointer items-center gap-2">
-
-                  <input
-                    type="checkbox"
-                    checked={availability.custom}
-                    onChange={(e) =>
-                      setAvailability((prev) => ({
-                        ...prev,
-                        custom: e.target.checked,
-                      }))
-                    }
-                    className="h-3 w-3 accent-[#344a22]"
-                  />
-
-                  <span className="text-[12px] text-stone-500">
-                    Custom Crafting
-                  </span>
-
-                </label>
-
-              </div>
-
-            </div>
-
-
-            {/* Materials */}
-            <div className="mt-5">
-
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Wood & Materials
-              </label>
-
-              <div className="mt-2 flex flex-wrap gap-1.5 border-t border-[#ddd9d0] pt-3">
-
-                {materials.map((material) => (
-
-                  <button
-                    key={material}
-                    type="button"
-                    onClick={() =>
-                      setSelectedMaterial(material)
-                    }
-                    className={`
-                      rounded-md
-                      border
-                      px-2
-                      py-1
-                      text-[12px]
-                      transition
-                      ${
-                        selectedMaterial === material
-                          ? 'border-[#344a22] bg-[#344a22] text-white'
-                          : 'border-[#ddd9d0] bg-white text-stone-500 hover:border-[#344a22]'
-                      }
-                    `}
-                  >
-                    {material}
-                  </button>
-
-                ))}
-
-              </div>
-
-            </div>
-
-
-            {/* Price */}
-            <div className="mt-5">
-
-              <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
-                Max Price
-              </label>
-
-              <div className="mt-2 border-t border-[#ddd9d0] pt-3">
-
-                <input
-                  type="range"
-                  min="1000"
-                  max="100000"
-                  step="50"
-                  value={maxPrice}
-                  onChange={(e) => {
-                    setMaxPrice(Number(e.target.value));
-                    setVisibleCount(PRODUCTS_PER_LOAD);
-                  }}
-                  className="w-full accent-[#344a22]"
-                />
-
-                <div className="mt-2 flex justify-between text-[12px] text-stone-500">
-
-                  <span>
-                    ₱1000
-                  </span>
-
-                  <span className="font-semibold text-stone-700">
-                    ₱{maxPrice.toLocaleString()}
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* Clear */}
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="
-                mt-5
-                h-8
-                w-full
-                rounded-md
-                border
-                border-[#ddd9d0]
-                bg-white
-                text-[12px]
-                font-semibold
-                uppercase
-                tracking-wider
-                text-stone-600
-                transition
-                hover:border-[#344a22]
-                hover:text-[#344a22]
-              "
-            >
-              Clear All Filters
-            </button>
-
-          </aside>
+       <div>
+  {/* Mobile Toggle Button (Visible on smaller screens) */}
+  <div className="mb-4 lg:hidden">
+    <button
+      type="button"
+      onClick={() => setIsFilterOpen(!isFilterOpen)}
+      className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#ddd9d0] bg-white px-4 py-2 text-[12px] font-semibold uppercase tracking-wider text-[#344a22] shadow-sm transition hover:bg-[#faf9f6]"
+    >
+      {isFilterOpen ? (
+        <>
+          <X className="h-4 w-4" /> Hide Filters
+        </>
+      ) : (
+        <>
+          <SlidersHorizontal className="h-4 w-4" /> Show Filters
+        </>
+      )}
+    </button>
+  </div>
+
+  {/* Sidebar Content (Toggles visibility on mobile, always visible on lg screens) */}
+  <aside 
+    className={`
+      h-fit rounded-xl border border-[#ddd9d0] bg-[#faf9f6] p-4 transition-all duration-300
+      ${isFilterOpen ? 'block' : 'hidden lg:block'}
+    `}
+  >
+    {/* Search */}
+    <div>
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Search
+      </label>
+      <div className="mt-2 border-t border-[#ddd9d0] pt-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-3 w-3 -translate-y-1/2 text-stone-400" />
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setVisibleCount(PRODUCTS_PER_LOAD);
+            }}
+            placeholder="Type to search..."
+            className="h-8 w-full rounded-md border border-[#ddd9d0] bg-white pl-8 pr-2 text-[12px] text-stone-700 outline-none transition focus:border-[#344a22]"
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Sort */}
+    <div className="mt-5">
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Sort By
+      </label>
+      <div className="mt-2 border-t border-[#ddd9d0] pt-3">
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          className="h-8 w-full rounded-md border border-[#ddd9d0] bg-white px-2 text-[12px] text-stone-600 outline-none transition focus:border-[#344a22]"
+        >
+          <option value="default">Default Sorting</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="name">Name</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Categories */}
+    <div className="mt-5">
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Categories
+      </label>
+      <div className="mt-2 space-y-2 border-t border-[#ddd9d0] pt-3">
+        {categories.map((category) => (
+          <label
+            key={category}
+            className="flex cursor-pointer items-center gap-2 text-xs text-stone-600"
+          >
+            <input
+              type="checkbox"
+              checked={selectedCategories.includes(category)}
+              onChange={() => toggleCategory(category)}
+              className="h-3 w-3 accent-[#344a22]"
+            />
+            <span>{category}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    {/* Availability */}
+    <div className="mt-5">
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Availability
+      </label>
+      <div className="mt-2 space-y-2 border-t border-[#ddd9d0] pt-3">
+        <label className="flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={availability.inStock}
+            onChange={(e) =>
+              setAvailability((prev) => ({
+                ...prev,
+                inStock: e.target.checked,
+              }))
+            }
+            className="h-3 w-3 accent-[#344a22]"
+          />
+          <span className="text-[12px] text-stone-500">In Stock Only</span>
+        </label>
+
+        <label className="flex cursor-pointer items-center gap-2">
+          <input
+            type="checkbox"
+            checked={availability.custom}
+            onChange={(e) =>
+              setAvailability((prev) => ({
+                ...prev,
+                custom: e.target.checked,
+              }))
+            }
+            className="h-3 w-3 accent-[#344a22]"
+          />
+          <span className="text-[12px] text-stone-500">Custom Crafting</span>
+        </label>
+      </div>
+    </div>
+
+    {/* Materials */}
+    <div className="mt-5">
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Wood & Materials
+      </label>
+      <div className="mt-2 flex flex-wrap gap-1.5 border-t border-[#ddd9d0] pt-3">
+        {materials.map((material) => (
+          <button
+            key={material}
+            type="button"
+            onClick={() => setSelectedMaterial(material)}
+            className={`rounded-md border px-2 py-1 text-[12px] transition ${
+              selectedMaterial === material
+                ? 'border-[#344a22] bg-[#344a22] text-white'
+                : 'border-[#ddd9d0] bg-white text-stone-500 hover:border-[#344a22]'
+            }`}
+          >
+            {material}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Price */}
+    <div className="mt-5">
+      <label className="text-[12px] font-semibold uppercase tracking-wider text-[#344a22]">
+        Max Price
+      </label>
+      <div className="mt-2 border-t border-[#ddd9d0] pt-3">
+        <input
+          type="range"
+          min="1000"
+          max="100000"
+          step="50"
+          value={maxPrice}
+          onChange={(e) => {
+            setMaxPrice(Number(e.target.value));
+            setVisibleCount(PRODUCTS_PER_LOAD);
+          }}
+          className="w-full accent-[#344a22]"
+        />
+        <div className="mt-2 flex justify-between text-[12px] text-stone-500">
+          <span>₱1000</span>
+          <span className="font-semibold text-stone-700">
+            ₱{maxPrice.toLocaleString()}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {/* Clear */}
+    <button
+      type="button"
+      onClick={clearFilters}
+      className="mt-5 h-8 w-full rounded-md border border-[#ddd9d0] bg-white text-[12px] font-semibold uppercase tracking-wider text-stone-600 transition hover:border-[#344a22] hover:text-[#344a22]"
+    >
+      Clear All Filters
+    </button>
+  </aside>
+</div>
 
 
           {/* =====================================================

@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import SingleProduct from '../pages/SingleProduct';
+import SingleProduct from '../pages/Single';
 import Header from '../layouts/Header';
 export const Test = ({ inventory }) => {
 

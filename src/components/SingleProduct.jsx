@@ -19,6 +19,7 @@ import {
   Minus,
   RotateCcw,
 } from 'lucide-react';
+import ProductReview from './ProductReview';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://ignacio-server.test/api';
 
 export default function SingleProduct() {
@@ -1385,7 +1386,7 @@ export default function SingleProduct() {
         </div>
 
       )}
-
+    <ProductReview product={product}/>
     </div>
 
   );

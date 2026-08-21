@@ -14,7 +14,7 @@ import Inventory from './pages/Inventory';
 import Sales from './pages/Sales';
 import Analytics from './pages/Analytics';
 import StockMovements from './pages/StockMovements';
-import SingleProduct from './pages/SingleProduct';
+import SingleProduct from './pages/Single';
 // import ProductList from './pages/ProductList';
 
 import Admin from './pages/Admin';

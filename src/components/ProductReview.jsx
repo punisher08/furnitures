@@ -18,6 +18,7 @@ const ProductReview = ({ product }) => {
   const [activeTab, setActiveTab] = useState('all');
   const [expandedReviews, setExpandedReviews] = useState({});
   const [isReviewFormVisible, setIsVisible] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [reviews, setProductReviews] = useState([]);
 
   // Fetch Reviews Effect
@@ -104,9 +105,10 @@ const ProductReview = ({ product }) => {
       [reviewId]: !prev[reviewId],
     }));
   };
-  const handleOnSubmit = (data,formData) =>{
-    console.log(data);
-    console.log(formData);
+  const handleFormVisibility = ()=>{
+    setIsVisible(false)
+    setIsFormSubmitted(true)
+    
     
   }
 
@@ -209,7 +211,9 @@ const ProductReview = ({ product }) => {
           </div>
 
           <button
-            onClick={() => setIsVisible(!isReviewFormVisible)}
+            onClick={() => {
+              setIsVisible(!isReviewFormVisible);              
+            }}
             type="button"
             className="rounded-full bg-[#344a22] px-6 py-3 text-[9px] font-semibold uppercase tracking-wider text-white transition hover:bg-[#283a1a]"
           >
@@ -220,7 +224,12 @@ const ProductReview = ({ product }) => {
         {/* WRITE A REVIEW FORM CONTAINER */}
         {isReviewFormVisible && (
           <div className="mt-6 mb-8">
-            <ReviewForm product={product} />
+            <ReviewForm product={product} toggleModal={handleFormVisibility} />
+          </div>
+        )}
+        {isFormSubmitted && (
+          <div className="font-serif rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-center text-sm font-medium">
+            Review submitted successfully! Thank you for your feedback.
           </div>
         )}
 
@@ -332,7 +341,7 @@ const ProductReview = ({ product }) => {
                     </div>
 
                     <div className="mt-5 border-t border-[#eeeae2] pt-5">
-                      <h4 className="font-serif text-base font-medium text-[#344a22]">
+                      <h4 className="hidden font-serif text-base font-medium text-[#344a22]">
                         {review.title}
                       </h4>
                       <p className="mt-2 max-w-3xl text-[12px] leading-5 text-stone-500">

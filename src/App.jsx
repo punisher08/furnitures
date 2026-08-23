@@ -22,6 +22,7 @@ import Login, { isAuthenticated } from './pages/Login';
 import Front from './pages/Front';
 import Newarrivals from './pages/Newarrivals';
 import About from './pages/About';
+import Reviews from './pages/Reviews';
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -49,10 +50,12 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/collection/new" element={<Newarrivals />} />
+        
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/admin" element={<Admin />} />
+            <Route path="/reviews" element={<Reviews />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/analytics" element={<Analytics />} />

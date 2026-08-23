@@ -148,7 +148,7 @@ function AboutUs() {
             </p>
 
             <p className="mt-4 max-w-[390px] text-[15px] leading-[1.65] text-[#718093]">
-              Led by CEO Jhomel Ignacio, our goal is simple — to create
+              Led by Jhomel Ignacio, our goal is simple — to create
               furniture that looks beautiful, feels right at home, and is
               made to be enjoyed for years to come.
             </p>
@@ -165,12 +165,7 @@ function AboutUs() {
                 2024
               </div>
 
-              <div>
-                <span className="font-semibold text-[#10263b]">
-                  CEO:
-                </span>{' '}
-                Jhomel Ignacio
-              </div>
+              
 
               <div>
                 <span className="font-semibold text-[#10263b]">

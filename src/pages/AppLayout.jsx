@@ -996,7 +996,7 @@ if (item.imageFile instanceof File) {
 
     const path = location.pathname;
 
-    if (path === '/') {
+    if (path === '/admin') {
       return 'overview';
     }
 
@@ -1078,9 +1078,10 @@ if (item.imageFile instanceof File) {
         activeTab={activeTab}
 
         setActiveTab={(tab) => {
-
+         
+         
           if (tab === 'overview') {
-            navigate('/');
+            navigate('/admin');
           }
 
           else if (tab === 'inventory') {
@@ -1098,6 +1099,9 @@ if (item.imageFile instanceof File) {
 
           else if (tab === 'movements') {
             navigate('/stock-movements');
+          }
+          else if (tab === 'reviews') {
+            navigate('/reviews');
           }
 
         }}

@@ -20,7 +20,6 @@ export default function Front() {
       <LuxuryBanner/>
       <BeforeAfterSection />
       <DesignSpaces/>
-      <ProductListing />
     </div>
   )
 }

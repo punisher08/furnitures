@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react';
+import api from '../inc/API_BASE_URL';
 
-const ReviewForm = ({ product, onCancel, onSubmit }) => {
+const ReviewForm = ({ product, onCancel, onSubmit,isReviewFormVisible ,toggleModal}) => {
   const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     rating: 0,
-    title: '',
+    title: product.name +' Review',
     comment: '',
     image: null,
   });
@@ -36,7 +37,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
     }));
   };
 
-  
+
   /*
   |--------------------------------------------------------------------------
   | Rating
@@ -129,10 +130,8 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
       newErrors.name = 'Please enter your name.';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Please enter your email.';
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    if (formData.email != '' &&
+!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
     ) {
       newErrors.email = 'Please enter a valid email address.';
     }
@@ -141,13 +140,13 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
       newErrors.rating = 'Please select a rating.';
     }
 
-    if (!formData.title.trim()) {
-      newErrors.title = 'Please add a review title.';
-    }
+    // if (!formData.title.trim()) {
+    //   newErrors.title = 'Please add a review title.';
+    // }
 
-    if (!formData.comment.trim()) {
-      newErrors.comment = 'Please write your review.';
-    }
+    // if (!formData.comment.trim()) {
+    //   newErrors.comment = 'Please write your review.';
+    // }
 
     setErrors(newErrors);
 
@@ -160,7 +159,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
   |--------------------------------------------------------------------------
   */
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -172,15 +171,11 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
     | FormData
     |--------------------------------------------------------------------------
     |
-    | This is ready for:
-    |
-    | POST /reviews
-    |
     */
 
     const data = new FormData();
 
-    data.append('productId', product?.id || '');
+    data.append('product_id', product?.id || '');
     data.append('name', formData.name);
     data.append('email', formData.email);
     data.append('rating', formData.rating);
@@ -196,19 +191,34 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
     | Pass to parent
     |--------------------------------------------------------------------------
     */
-
-    if (onSubmit) {
-      onSubmit(data, formData);
-      console.log(data);
-      console.log(formData);
-      
+    if(toggleModal){
+      toggleModal()
     }
 
-    console.log('Review submitted:', {
-      productId: product?.id,
-      ...formData,
-    });
+    const response = await api.post(
+      '/reviews',
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+   
+    clearForm();
+    
   };
+  const clearForm = ()=>{
+         setFormData({
+        name: '',
+        email: '',
+        rating: 0,
+        title: '',
+        comment: '',
+        image: null,
+      })
+    setImagePreview(null);
+  }
 
   /*
   |--------------------------------------------------------------------------
@@ -241,7 +251,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
               CUSTOMER INFORMATION
           ==================================================== */}
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-1">
 
             {/* Name */}
 
@@ -257,11 +267,10 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Sarah Mitchell"
-                className={`w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${
-                  errors.name
+                className={`w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${errors.name
                     ? 'border-red-300'
                     : 'border-[#dedbd3]'
-                }`}
+                  }`}
               />
 
               {errors.name && (
@@ -277,7 +286,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
 
             <div>
 
-              <label className="mb-2 block text-[9px] font-semibold uppercase tracking-wider text-stone-500">
+              <label className="hidden mb-2 block text-[9px] font-semibold uppercase tracking-wider text-stone-500">
                 Email Address
               </label>
 
@@ -287,11 +296,10 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                className={`w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${
-                  errors.email
+                className={`hidden w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${errors.email
                     ? 'border-red-300'
                     : 'border-[#dedbd3]'
-                }`}
+                  }`}
               />
 
               {errors.email && (
@@ -309,7 +317,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
               RATING
           ==================================================== */}
 
-          <div className="mt-7 border-t border-[#eeeae2] pt-7">
+          <div className="mt-0 border-t border-[#eeeae2] pt-2">
 
             <label className="block text-[9px] font-semibold uppercase tracking-wider text-stone-500">
               Your Rating
@@ -338,11 +346,10 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                       onMouseLeave={() =>
                         setHoverRating(0)
                       }
-                      className={`text-2xl leading-none transition ${
-                        active
+                      className={`text-2xl leading-none transition ${active
                           ? 'text-[#c89b45]'
                           : 'text-stone-200'
-                      }`}
+                        }`}
                       aria-label={`${star} star`}
                     >
                       ★
@@ -356,7 +363,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 <span className="text-[9px] text-stone-400">
                   {
                     ratingLabels[
-                      hoverRating || formData.rating
+                    hoverRating || formData.rating
                     ]
                   }
                 </span>
@@ -377,11 +384,11 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
               REVIEW
           ==================================================== */}
 
-          <div className="mt-7 border-t border-[#eeeae2] pt-7">
+          <div className="mt-2 border-t border-[#eeeae2] pt-0">
 
             {/* Title */}
 
-            <div>
+            <div className='hidden'>
 
               <label className="mb-2 block text-[9px] font-semibold uppercase tracking-wider text-stone-500">
                 Review Title
@@ -393,11 +400,10 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g. Beautiful and incredibly comfortable"
-                className={`w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${
-                  errors.title
+                className={`w-full rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${errors.title
                     ? 'border-red-300'
                     : 'border-[#dedbd3]'
-                }`}
+                  }`}
               />
 
               {errors.title && (
@@ -419,7 +425,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                   Your Review
                 </label>
 
-                <span className="text-[8px] text-stone-300">
+                <span className="text-[12px] text-stone-300">
                   {formData.comment.length}/1000
                 </span>
 
@@ -435,11 +441,10 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 }}
                 rows={6}
                 placeholder="Tell us about the quality, comfort, design, delivery, or anything else you loved about your purchase..."
-                className={`w-full resize-none rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] leading-5 text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${
-                  errors.comment
+                className={`w-full resize-none rounded-lg border bg-[#faf9f6] px-4 py-3 text-[10px] leading-5 text-stone-700 outline-none transition placeholder:text-stone-300 focus:border-[#789052] focus:ring-1 focus:ring-[#789052] ${errors.comment
                     ? 'border-red-300'
                     : 'border-[#dedbd3]'
-                }`}
+                  }`}
               />
 
               {errors.comment && (
@@ -465,18 +470,18 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
 
                 <label className="block text-[9px] font-semibold uppercase tracking-wider text-stone-500">
                   Add a Photo
-                  <span className="ml-1 font-normal text-stone-300">
+                  <span className="ml-1 font-normal text-green-700">
                     (Optional)
                   </span>
                 </label>
 
-                <p className="mt-1 text-[8px] text-stone-400">
+                <p className="mt-1 text-[12px] text-stone-400">
                   Share a photo of this piece in your home.
                 </p>
 
               </div>
 
-              <span className="text-[8px] text-stone-300">
+              <span className="text-[11px] text-stone-300">
                 JPG, PNG or WEBP · Max 5MB
               </span>
 
@@ -590,7 +595,7 @@ const ReviewForm = ({ product, onCancel, onSubmit }) => {
                 ✓
               </span>
 
-              <p className="text-[8px] leading-4 text-stone-400">
+              <p className="text-[11px] leading-4 text-stone-400">
                 Your review helps other customers make better
                 decisions. Reviews are published after moderation.
                 Your email address will never be displayed publicly.

@@ -1,23 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
+const VITE_ASSETS_URL = import.meta.env.VITE_ASSETS_URL || '/assets';
 
 const fallbackTransformations = [
   {
     title: 'Modern Living Room',
     description:
       'Transform your living space with thoughtfully designed furniture made for everyday comfort.',
-    before:
-      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=90',
-    after:
-      'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1800&q=90',
+    before:VITE_ASSETS_URL + '/after-1.png',
+    after:VITE_ASSETS_URL + '/before-1.png',
   },
   {
     title: 'Elegant Home Interior',
     description:
       'Bring warmth and character into your home with furniture crafted to complement your space.',
-    before:
-      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1800&q=90',
-    after:
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=90',
+    before:VITE_ASSETS_URL + '/after-2.png',
+    after:VITE_ASSETS_URL + '/before-2.png',
   },
 ]
 
@@ -513,7 +510,7 @@ function BeforeAfterSection() {
           <div className="absolute bottom-6 right-6 z-20">
 
             <span className="rounded-lg bg-[#344f21]/95 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
-              Ignacio Furnitures
+              AFTER
             </span>
 
           </div>
@@ -525,7 +522,7 @@ function BeforeAfterSection() {
 
           <div className="absolute left-6 top-6 z-20 max-w-[420px] text-white">
 
-            <h3 className="font-serif text-2xl drop-shadow-md sm:text-3xl">
+            <h3 className="hidden lg:block font-serif text-2xl drop-shadow-md sm:text-3xl rounded-lg  bg-none lg:bg-[#344f21]/95 px-4 py-2  font-bold uppercase tracking-wide text-white lg:backdrop-blur-sm">
               {transformation.title}
             </h3>
 

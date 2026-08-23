@@ -1,14 +1,15 @@
-import { Link } from 'react-router-dom'
-import ProductSearch from '../components/ProductSearch'
-
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ProductSearch from '../components/ProductSearch';
 import api from '../inc/API_BASE_URL';
+
 
 /**
  * Extract API response data safely.
  */
 const unwrapResponseData = (response) => {
   let payload = response?.data;
+
   if (
     payload &&
     typeof payload === 'object' &&
@@ -25,7 +26,6 @@ const unwrapResponseData = (response) => {
     return payload.products;
   }
 
-  // [...]
   if (Array.isArray(payload)) {
     return payload;
   }
@@ -33,64 +33,17 @@ const unwrapResponseData = (response) => {
   return [];
 };
 
-function Header() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState(true);
- 
-    useEffect(() => {
-      let isMounted = true;
-  
-      const fetchProducts = async () => {
-        try {
-          setLoading(true);
-  
-          const response = await api.get('/get/products');
-  
-          if (!isMounted) {
-            return;
-          }
-          
-          const list = unwrapResponseData(response);
-          const normalizedProducts = list.map(normalizeProduct);
-  
-        
-          setProducts(normalizedProducts);
-  
-        } catch (error) {
-          console.error(
-            'Failed to load guest products:',
-            error
-          );
-  
-          if (isMounted) {
-            setProducts([]);
-          }
-  
-        } finally {
-          if (isMounted) {
-            setLoading(false);
-          }
-        }
-      };
-  
-      fetchProducts();
-  
-      return () => {
-        isMounted = false;
-      };
-    }, []);
-    /**
+/**
  * Normalize product from API.
  */
 const normalizeProduct = (item = {}) => {
   const price = Number(
     item.retailPrice ??
-    item.retail_price ??
-    item.price ??
-    item.sale_price ??
-    item.unit_price ??
-    0
+      item.retail_price ??
+      item.price ??
+      item.sale_price ??
+      item.unit_price ??
+      0
   );
 
   const image =
@@ -132,17 +85,17 @@ const normalizeProduct = (item = {}) => {
 
     retailPrice: price,
 
-    price: price,
+    price,
 
     stock: Number(
       item.stock ??
-      item.quantity ??
-      0
+        item.quantity ??
+        0
     ),
 
     imageUrl: image,
 
-    image: image,
+    image,
 
     sku:
       item.sku ??
@@ -150,6 +103,67 @@ const normalizeProduct = (item = {}) => {
       '',
   };
 };
+
+function Header() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+
+  /**
+   * Load products for search.
+   */
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const response = await api.get('/get/products');
+
+        if (!isMounted) {
+          return;
+        }
+
+        const list = unwrapResponseData(response);
+
+        const normalizedProducts = list.map(normalizeProduct);
+
+        setProducts(normalizedProducts);
+      } catch (error) {
+        console.error(
+          'Failed to load guest products:',
+          error
+        );
+
+        if (isMounted) {
+          setProducts([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProducts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  /**
+   * Close mobile menu.
+   */
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+
+    
+  };
+
   return (
     <header className="w-full bg-[#faf9f6] text-[#171717]">
 
@@ -161,14 +175,14 @@ const normalizeProduct = (item = {}) => {
         <div className="mx-auto flex h-10 max-w-[1500px] items-center justify-between px-5 sm:px-8 lg:px-12">
 
           {/* Shipping */}
-          <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wide">
+          <div className="flex items-center gap-2 text-[11px] sm:text-[12px] font-semibold uppercase tracking-wide">
 
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.7"
-              className="h-4 w-4"
+              className="h-4 w-4 flex-shrink-0"
             >
               <path d="M3 6h11v11H3z" />
               <path d="M14 9h4l3 3v5h-7z" />
@@ -179,19 +193,15 @@ const normalizeProduct = (item = {}) => {
             <span>
               Free shipping on all orders over $500
             </span>
-
           </div>
 
-
           {/* Right links */}
-
           <div className="hidden items-center gap-5 text-xs text-white/80 md:flex">
 
             <Link
               to="/products"
               className="flex items-center gap-2 transition hover:text-white"
             >
-
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -204,13 +214,11 @@ const normalizeProduct = (item = {}) => {
               </svg>
 
               Products
-
             </Link>
 
             <span className="h-4 w-px bg-white/30" />
 
             {/* Instagram */}
-
             <a
               href="#"
               aria-label="Instagram"
@@ -223,8 +231,20 @@ const normalizeProduct = (item = {}) => {
                 strokeWidth="1.6"
                 className="h-4 w-4"
               >
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4" />
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="5"
+                />
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4"
+                />
+
                 <circle
                   cx="17.5"
                   cy="6.5"
@@ -235,7 +255,6 @@ const normalizeProduct = (item = {}) => {
             </a>
 
             {/* Pinterest */}
-
             <a
               href="#"
               aria-label="Pinterest"
@@ -245,7 +264,6 @@ const normalizeProduct = (item = {}) => {
             </a>
 
             {/* Facebook */}
-
             <a
               href="#"
               aria-label="Facebook"
@@ -255,7 +273,6 @@ const normalizeProduct = (item = {}) => {
             </a>
 
           </div>
-
         </div>
       </div>
 
@@ -266,20 +283,23 @@ const normalizeProduct = (item = {}) => {
 
       <div className="border-b border-[#e7e4de]">
 
-        <div className="mx-auto flex h-[102px] max-w-[1500px] items-center gap-8 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex min-h-[82px] lg:h-[102px] max-w-[1500px] items-center gap-4 px-5 sm:px-8 lg:gap-8 lg:px-12">
 
-          {/* Logo */}
+          {/* =================================================
+              LOGO
+          ================================================== */}
+          
+
 
           <Link
             to="/"
+            onClick={closeMobileMenu}
             className="flex shrink-0 items-center"
           >
-
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
 
               {/* Logo icon */}
-
-              <div className="relative flex h-[58px] w-[42px] items-end justify-center">
+              <div className="relative flex h-[48px] w-[34px] items-end justify-center sm:h-[58px] sm:w-[42px]">
 
                 <svg
                   viewBox="0 0 50 70"
@@ -331,48 +351,50 @@ const normalizeProduct = (item = {}) => {
 
               </div>
 
-
               {/* Brand */}
-
               <div className="leading-none">
 
-                <span className="front-page block font-serif text-[20px] lg:text-[38px] font-semibold tracking-tight text-[#344a22]">
+                <span className="block font-serif text-[20px] font-semibold tracking-tight text-[#344a22] sm:text-[26px] lg:text-[38px]">
                   IGNACIO
                 </span>
 
-                <span className="mt-1 block text-[8px] font-medium uppercase tracking-[0.45em] text-[#789052]">
+                <span className="mt-1 block text-[7px] font-medium uppercase tracking-[0.35em] text-[#789052] sm:text-[8px] sm:tracking-[0.45em]">
                   Furnitures
                 </span>
 
               </div>
 
             </div>
-
           </Link>
 
 
-          {/* Search */}
+          {/* =================================================
+              DESKTOP SEARCH
+          ================================================== */}
 
           <div className="mx-auto hidden max-w-[540px] flex-1 lg:block">
-
-            {/* SEARCH */}
-                    <div className="mx-auto hidden max-w-[540px] flex-1 lg:block">
-                        <ProductSearch inventory={products} activeTab={activeTab} setActiveTab={setActiveTab} />
-                    </div>
-
+            <ProductSearch
+              inventory={products}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />   
           </div>
 
 
-          {/* Header Actions */}
+          {/* =================================================
+              HEADER ACTIONS
+          ================================================== */}
 
-          <div className="ml-auto flex items-center gap-5 sm:gap-7">
+          <div className="ml-auto flex items-center gap-4 sm:gap-6 lg:gap-7">
 
-            {/* Mobile search */}
-
+            {/* Mobile Search */}
             <button
               type="button"
-              className="hidden"
+              className="flex lg:hidden"
               aria-label="Search"
+              onClick={() =>
+                setMobileMenuOpen((prev) => !prev)
+              }
             >
               <svg
                 viewBox="0 0 24 24"
@@ -381,19 +403,22 @@ const normalizeProduct = (item = {}) => {
                 strokeWidth="1.7"
                 className="h-5 w-5"
               >
-                <circle cx="11" cy="11" r="6.5" />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="6.5"
+                />
+
                 <path d="m16 16 5 5" />
               </svg>
             </button>
 
 
             {/* Favorites */}
-
             <Link
               to="/favorites"
               className="group relative hidden flex-col items-center gap-1 sm:flex"
             >
-
               <div className="relative">
 
                 <svg
@@ -415,42 +440,41 @@ const normalizeProduct = (item = {}) => {
               <span className="text-[11px]">
                 Favorites
               </span>
-
             </Link>
 
 
             {/* Account */}
-
             <Link
               to="/admin"
               className="group flex flex-col items-center gap-1"
             >
-
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.6"
-                className="h-6 w-6 transition group-hover:text-[#344a22]"
+                className="h-5 w-5 sm:h-6 sm:w-6 transition group-hover:text-[#344a22]"
               >
-                <circle cx="12" cy="7" r="3.5" />
+                <circle
+                  cx="12"
+                  cy="7"
+                  r="3.5"
+                />
+
                 <path d="M5 21c.8-4.2 3.1-6.3 7-6.3s6.2 2.1 7 6.3" />
               </svg>
 
-              <span className="text-[11px]">
+              <span className="hidden text-[11px] sm:block">
                 Account
               </span>
-
             </Link>
 
 
             {/* Cart */}
-
             <Link
               to="/admin"
               className="group flex flex-col items-center gap-1"
             >
-
               <div className="relative">
 
                 <svg
@@ -458,7 +482,7 @@ const normalizeProduct = (item = {}) => {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.6"
-                  className="h-6 w-6 transition group-hover:text-[#344a22]"
+                  className="h-5 w-5 sm:h-6 sm:w-6 transition group-hover:text-[#344a22]"
                 >
                   <path d="M4 7h16v13H4z" />
                   <path d="M8 7V5a4 4 0 0 1 8 0v2" />
@@ -470,28 +494,63 @@ const normalizeProduct = (item = {}) => {
 
               </div>
 
-              <span className="text-[11px]">
+              <span className="hidden text-[11px] sm:block">
                 Cart
               </span>
 
             </Link>
 
+
+            {/* Mobile Menu Button */}
+    <button
+              type="button"
+              onClick={() =>
+                setMobileMenuOpen((prev) => !prev)
+              }
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#ddd9d0] transition hover:bg-[#f0eee8] lg:hidden"
+              aria-label={
+                mobileMenuOpen
+                  ? 'Close menu'
+                  : 'Open menu'
+              }
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? (
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  className="h-5 w-5"
+                >
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              ) : (
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  className="h-5 w-5"
+                >
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+
           </div>
 
         </div>
-
       </div>
 
 
       {/* =====================================================
-          NAVIGATION
+          DESKTOP NAVIGATION
       ====================================================== */}
 
       <nav className="hidden border-b border-[#e7e4de] lg:block">
 
         <div className="mx-auto flex h-[76px] max-w-[1500px] items-center gap-10 px-5 sm:px-8 lg:px-12">
-
-          {/* SHOP */}
 
           <NavItem
             icon="shop"
@@ -501,29 +560,18 @@ const normalizeProduct = (item = {}) => {
             to="/products"
           />
 
-
-         
-        
-          {/* SALE */}
-
-          
-          
           <NavItem
             icon="sale"
             title="About"
-            subtitle="Special Offers"
+            subtitle="Our Story"
             to="/about"
           />
 
-
           {/* CTA */}
-
           <Link
-            to="https://www.facebook.com/Checkbread"
-            target="_blank"
+            to="/contact"
             className="ml-auto flex h-[58px] items-center gap-4 rounded-full bg-[#344a22] px-4 pr-6 text-white transition hover:bg-[#283a1a]"
           >
-
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-[#ddd8cc]">
 
               <svg
@@ -560,56 +608,131 @@ const normalizeProduct = (item = {}) => {
           </Link>
 
         </div>
-
       </nav>
 
 
       {/* =====================================================
-          MOBILE NAV
+          MOBILE MENU
       ====================================================== */}
 
-      <div className="border-b border-[#e7e4de] lg:hidden">
+     {/* =====================================================
+    MOBILE MENU
+====================================================== */}
 
-        <div className="flex h-14 items-center justify-between px-5">
+{mobileMenuOpen && (
+  <div className="lg:hidden border-b border-[#e7e4de] bg-[#faf9f6]">
 
-          <button
-            type="button"
-            className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.15em]"
-          >
+    <div className="px-5 py-5">
+
+      {/* Mobile Search */}
+      <div className="mb-5">
+        <ProductSearch
+          inventory={products}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      </div>
+
+      {/* Mobile Navigation */}
+      <nav className="space-y-1">
+
+        <MobileNavItem
+          to="/products"
+          title="Shop"
+          subtitle="Furniture & Decor"
+          icon="shop"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        <MobileNavItem
+          to="/about"
+          title="About"
+          subtitle="Our Story"
+          icon="sale"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        <MobileNavItem
+          to="/favorites"
+          title="Favorites"
+          subtitle="Your saved furniture"
+          icon="heart"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        <MobileNavItem
+          to="/admin"
+          title="Account"
+          subtitle="Manage your account"
+          icon="user"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        <MobileNavItem
+          to="/contact"
+          title="Contact"
+          subtitle="Get in touch with us"
+          icon="contact"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+      </nav>
+
+      {/* CTA */}
+      <Link
+        to="/contact"
+        onClick={() => setMobileMenuOpen(false)}
+        className="mt-5 flex w-full items-center justify-between rounded-2xl bg-[#344a22] px-5 py-4 text-white transition hover:bg-[#283a1a]"
+      >
+
+        <div className="flex items-center gap-3">
+
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
 
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.7"
+              strokeWidth="1.5"
               className="h-5 w-5"
             >
-              <path d="M4 6h16M4 12h16M4 18h16" />
+              <path d="M4 18h16" />
+              <path d="M6 18V8h12v10" />
+              <path d="M9 8V5h6v3" />
+              <path d="M8 12h8" />
             </svg>
 
-            Menu
+          </div>
 
-          </button>
+          <div>
+            <span className="block text-sm font-semibold">
+              Design Your Space
+            </span>
 
-
-          <Link
-            to="/contact"
-            className="rounded-full bg-[#344a22] px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-          >
-            Design Your Space
-          </Link>
+            <span className="block text-[10px] text-white/70">
+              Book a free consultation
+            </span>
+          </div>
 
         </div>
 
-      </div>
+        <span className="text-xl">
+          →
+        </span>
+
+      </Link>
+
+    </div>
+  </div>
+)}
 
     </header>
-  )
+  );
 }
 
 
 /* =========================================================
-   NAV ITEM
+   DESKTOP NAV ITEM
 ========================================================= */
 
 function NavItem({
@@ -629,7 +752,6 @@ function NavItem({
     >
 
       {/* Icon */}
-
       <div className="flex h-9 w-9 items-center justify-center">
 
         {icon === 'shop' && (
@@ -653,7 +775,7 @@ function NavItem({
             stroke="currentColor"
             strokeWidth="1.5"
             className="h-5 w-5"
-          > 
+          >
             <path d="M4 11h16v8H4z" />
             <path d="M6 11V7h5v4M13 11V7h5v4" />
             <path d="M6 19v2M18 19v2" />
@@ -703,7 +825,6 @@ function NavItem({
 
 
       {/* Text */}
-
       <div className="leading-tight">
 
         <div className="flex items-center gap-2">
@@ -739,7 +860,132 @@ function NavItem({
       </div>
 
     </Link>
-  )
+  );
 }
 
-export default Header
+
+/* =========================================================
+   MOBILE NAV ITEM
+========================================================= */
+
+function MobileNavItem({
+  to,
+  title,
+  subtitle,
+  icon,
+  onClick,
+}) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="group flex items-center justify-between rounded-xl px-3 py-3.5 transition hover:bg-[#f0eee8]"
+    >
+
+      <div className="flex items-center gap-3">
+
+        {/* Icon */}
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efede6] text-[#344a22] transition group-hover:bg-[#344a22] group-hover:text-white">
+
+          {icon === 'shop' && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-5 w-5"
+            >
+              <path d="M4 8h16v12H4z" />
+              <path d="M7 8V6a5 5 0 0 1 10 0v2" />
+              <path d="M9 12h6" />
+            </svg>
+          )}
+
+          {icon === 'sale' && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-5 w-5"
+            >
+              <path d="m20 13-7 7-10-10V4h6l10 9Z" />
+              <circle cx="7.5" cy="7.5" r="1" />
+            </svg>
+          )}
+
+          {icon === 'heart' && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-5 w-5"
+            >
+              <path d="M20.8 8.8c0 5.5-8.8 10.4-8.8 10.4S3.2 14.3 3.2 8.8A4.8 4.8 0 0 1 8 4c1.7 0 3.2.9 4 2.2C12.8 4.9 14.3 4 16 4a4.8 4.8 0 0 1 4.8 4.8Z" />
+            </svg>
+          )}
+
+          {icon === 'user' && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-5 w-5"
+            >
+              <circle
+                cx="12"
+                cy="7"
+                r="3.5"
+              />
+              <path d="M5 21c.8-4.2 3.1-6.3 7-6.3s6.2 2.1 7 6.3" />
+            </svg>
+          )}
+
+          {icon === 'contact' && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-5 w-5"
+            >
+              <path d="M4 5h16v14H4z" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+          )}
+
+        </div>
+
+
+        {/* Text */}
+        <div>
+          <span className="block text-sm font-semibold">
+            {title}
+          </span>
+
+          <span className="mt-0.5 block text-[10px] text-stone-400">
+            {subtitle}
+          </span>
+        </div>
+
+      </div>
+
+
+      {/* Arrow */}
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="h-4 w-4 text-stone-400 transition group-hover:translate-x-1 group-hover:text-[#344a22]"
+      >
+        <path d="m9 18 6-6-6-6" />
+      </svg>
+
+    </Link>
+  );
+}
+
+export default Header;

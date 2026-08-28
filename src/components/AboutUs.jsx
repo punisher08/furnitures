@@ -1,4 +1,17 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios';
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  'http://ignacio-server.test/api';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
 
 const stats = [
   {
@@ -48,20 +61,14 @@ function AboutUs() {
   const [products, setProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(true)
 
+
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products')
+        const response = await api.get(`/get/products`);
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch products')
-        }
-
-        const data = await response.json()
-
-        // Supports either:
-        // { products: [...] }
-        // or directly [...]
+        const data = response.data
         const productList = Array.isArray(data)
           ? data
           : data.products || data.data || []
@@ -76,6 +83,9 @@ function AboutUs() {
 
     fetchProducts()
   }, [])
+
+
+
 
   return (
     <section className="bg-[#faf9f7] px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
@@ -93,7 +103,7 @@ function AboutUs() {
             <div className="relative aspect-[0.72] overflow-hidden rounded-[24px]">
 
               <img
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=90"
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=90https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=90"
                 alt="Ignacio Furnitures interior"
                 className="h-full w-full object-cover"
               />
@@ -165,7 +175,7 @@ function AboutUs() {
                 2024
               </div>
 
-              
+
 
               <div>
                 <span className="font-semibold text-[#10263b]">
@@ -318,13 +328,7 @@ function AboutUs() {
 
                   {products.map((product) => {
 
-                    const image =
-                      product.image ||
-                      product.image_url ||
-                      product.thumbnail ||
-                      product.featured_image ||
-                      product.images?.[0] ||
-                      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80'
+                    const image = product.imageUrl || 'https://placehold.net/400x400.png'
 
                     const name =
                       product.name ||
@@ -344,7 +348,7 @@ function AboutUs() {
 
                       <a
                         key={product.id || slug || name}
-                        href={`/products/${product.id}`}
+                        href={`/product/${product.id}`}
                         className="
                           group
                           overflow-hidden

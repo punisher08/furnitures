@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import { DashboardOverview } from '../components/DashboardOverview';
+import Footer from '../components/Footer';
 
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
   } = useOutletContext();
 
   return (
+    <div>
     <DashboardOverview
       inventory={inventory}
       orders={orders}
@@ -51,5 +53,7 @@ export default function Home() {
         setIsInvoiceModalOpen(true);
       }}
     />
+    
+    </div>
   );
 }

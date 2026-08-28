@@ -6,15 +6,15 @@ const fallbackTransformations = [
     title: 'Modern Living Room',
     description:
       'Transform your living space with thoughtfully designed furniture made for everyday comfort.',
-    before:VITE_ASSETS_URL + '/after-1.png',
-    after:VITE_ASSETS_URL + '/before-1.png',
+    before: VITE_ASSETS_URL + '/after-1.png',
+    after: VITE_ASSETS_URL + '/before-1.png',
   },
   {
     title: 'Elegant Home Interior',
     description:
       'Bring warmth and character into your home with furniture crafted to complement your space.',
-    before:VITE_ASSETS_URL + '/after-2.png',
-    after:VITE_ASSETS_URL + '/before-2.png',
+    before: VITE_ASSETS_URL + '/after-2.png',
+    after: VITE_ASSETS_URL + '/before-2.png',
   },
 ]
 
@@ -36,142 +36,7 @@ function BeforeAfterSection() {
    * ==========================================================
    */
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/products')
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch products')
-        }
-
-        const data = await response.json()
-
-        const products = Array.isArray(data)
-          ? data
-          : data.products || data.data || []
-
-        /*
-         * Only use products that have usable images.
-         */
-
-        const productsWithImages = products
-          .map((product) => {
-            const images = Array.isArray(product.images)
-              ? product.images
-              : []
-
-            const image =
-              product.image ||
-              product.image_url ||
-              product.thumbnail ||
-              product.featured_image ||
-              images[0]
-
-            return {
-              ...product,
-              resolvedImage: image,
-            }
-          })
-          .filter((product) => product.resolvedImage)
-
-        /*
-         * If the API contains explicit before/after fields,
-         * use those.
-         */
-
-        const apiTransformations = productsWithImages
-          .map((product) => {
-            const before =
-              product.before_image ||
-              product.before ||
-              product.beforeImage
-
-            const after =
-              product.after_image ||
-              product.after ||
-              product.afterImage
-
-            if (!before || !after) {
-              return null
-            }
-
-            return {
-              title:
-                product.name ||
-                product.title ||
-                'Furniture Transformation',
-
-              description:
-                product.description ||
-                'See how Ignacio Furnitures can transform your space.',
-
-              before,
-              after,
-            }
-          })
-          .filter(Boolean)
-
-        /*
-         * If products have before/after images,
-         * use them directly.
-         */
-
-        if (apiTransformations.length > 0) {
-          setTransformations(apiTransformations.slice(0, 5))
-          return
-        }
-
-        /*
-         * Otherwise create a showcase using product images.
-         *
-         * This allows the section to work with your current
-         * /api/products endpoint even if it only returns
-         * normal product images.
-         */
-
-        if (productsWithImages.length >= 2) {
-          const generatedTransformations = []
-
-          for (
-            let index = 0;
-            index < productsWithImages.length - 1;
-            index += 2
-          ) {
-            const first = productsWithImages[index]
-            const second = productsWithImages[index + 1]
-
-            generatedTransformations.push({
-              title:
-                first.name ||
-                first.title ||
-                'Ignacio Furnitures Collection',
-
-              description:
-                first.description ||
-                'Discover furniture designed to bring comfort, style and character into your home.',
-
-              before: first.resolvedImage,
-              after: second.resolvedImage,
-            })
-          }
-
-          if (generatedTransformations.length > 0) {
-            setTransformations(generatedTransformations.slice(0, 5))
-          }
-        }
-      } catch (error) {
-        console.error(
-          'Unable to load furniture products:',
-          error
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchProducts()
-  }, [])
 
   const transformation =
     transformations[activeSlide] || fallbackTransformations[0]
@@ -567,10 +432,9 @@ function BeforeAfterSection() {
                   rounded-full
                   transition-all
                   duration-300
-                  ${
-                    index === activeSlide
-                      ? 'w-8 bg-[#344f21]'
-                      : 'w-2 bg-[#d3d0c9]'
+                  ${index === activeSlide
+                    ? 'w-8 bg-[#344f21]'
+                    : 'w-2 bg-[#d3d0c9]'
                   }
                 `}
               />

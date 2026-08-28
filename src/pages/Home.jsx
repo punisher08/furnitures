@@ -7,6 +7,7 @@ import LuxuryBanner from '../components/LuxuryBanner';
 import Header from '../layouts/Header';
 import DesignSpaces from '../components/DesignSpaces';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 
 export default function Front() {
   return(
@@ -20,6 +21,7 @@ export default function Front() {
       <LuxuryBanner/>
       <BeforeAfterSection />
       <DesignSpaces/>
+      <Footer/>
     </div>
   )
 }

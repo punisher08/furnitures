@@ -12,6 +12,7 @@ import {
 import {
   AnalyticsReports,
 } from '../components/AnalyticsReports';
+import Footer from '../components/Footer';
 
 export default function Analytics() {
 
@@ -22,6 +23,7 @@ export default function Analytics() {
   } = useOutletContext();
 
   return (
+    <div>
     <AnalyticsReports
 
       inventory={inventory}
@@ -47,5 +49,7 @@ export default function Analytics() {
       }}
 
     />
+    
+    </div>
   );
 }

@@ -23,6 +23,7 @@ import Front from './pages/Front';
 import Newarrivals from './pages/Newarrivals';
 import About from './pages/About';
 import Reviews from './pages/Reviews';
+import DownloadMp3 from './pages/DownloadMp3';
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -50,6 +51,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/collection/new" element={<Newarrivals />} />
+
+        <Route path="/download" element={<DownloadMp3 />} />
         
 
         <Route element={<ProtectedRoute />}>

@@ -24,6 +24,8 @@ import Newarrivals from './pages/Newarrivals';
 import About from './pages/About';
 import Reviews from './pages/Reviews';
 import DownloadMp3 from './pages/DownloadMp3';
+import MusicPlayerpage from './pages/MusicPlayerpage';
+import CV from './pages/Cv';
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -53,6 +55,9 @@ export default function App() {
         <Route path="/collection/new" element={<Newarrivals />} />
 
         <Route path="/download" element={<DownloadMp3 />} />
+        <Route path="/player" element={<MusicPlayerpage />} />
+
+        <Route path="/jhomelignacio" element={<CV />} />
         
 
         <Route element={<ProtectedRoute />}>

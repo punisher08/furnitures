@@ -192,7 +192,7 @@ const Footer = () => {
                 </div>
 
                 <a
-                  href="tel:+639000000000"
+                  href="tel:+639352989795"
                   className="flex items-center gap-3 text-sm text-white/60 transition hover:text-white"
                 >
                   <Phone
@@ -200,11 +200,11 @@ const Footer = () => {
                     className="text-[#c5a46d]"
                   />
 
-                  <span>+63 900 000 0000</span>
+                  <span>+63 935 298 9795</span>
                 </a>
 
                 <a
-                  href="mailto:info@ignaciofurnitures.com"
+                  href="mailto:jhomignacio05@gmail.com"
                   className="flex items-center gap-3 text-sm text-white/60 transition hover:text-white"
                 >
                   <Mail
@@ -212,7 +212,7 @@ const Footer = () => {
                     className="text-[#c5a46d]"
                   />
 
-                  <span>info@ignaciofurnitures.com</span>
+                  <span>jhomignacio05@gmail.com</span>
                 </a>
 
               </div>

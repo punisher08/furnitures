@@ -246,7 +246,7 @@ export default function Hero() {
                 <video
                   ref={videoRef}
                   className="absolute inset-0 h-full w-full object-cover object-top"
-                  src="/assets/videos/jhomelignacio-v1.mp4"
+                  src="/vuejs/assets/videos/jhomelignacio-v1.mp4"
                   autoPlay
                   muted
                   loop

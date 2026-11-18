@@ -26,6 +26,10 @@ import Reviews from './pages/Reviews';
 import DownloadMp3 from './pages/DownloadMp3';
 import MusicPlayerpage from './pages/MusicPlayerpage';
 import CV from './pages/Cv';
+import JobListings from './components/Joblistings';
+import Resume from './components/cv/Resume';
+
+
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -47,35 +51,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/products" element={<Front />} />
-        <Route path="/product/:id" element={<SingleProduct />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/collection/new" element={<Newarrivals />} />
-
-        <Route path="/download" element={<DownloadMp3 />} />
-        <Route path="/player" element={<MusicPlayerpage />} />
-
-        <Route path="/jhomelignacio" element={<CV />} />
-        
-
-        <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/sales" element={<Sales />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/stock-movements" element={<StockMovements />} />
-            
-          </Route>
+        <Route path="/vuejs" element={<CV />} />
+          <Route element={<ProtectedRoute />}>
         </Route>
-
-        <Route
-          path="*"
-          element={<Navigate to={isAuthenticated() ? '/' : '/login'} replace />}
-        />
       </Routes>
     </BrowserRouter>
   );
